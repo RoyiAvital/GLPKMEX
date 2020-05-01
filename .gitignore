@@ -1,0 +1,35 @@
+# Folders
+glpk-*
+
+# Media Files
+# *.png
+*.jpg
+*.bmp
+*.tif
+*.avi
+*.mp4
+
+# Documnets
+*.docx
+*.doc
+*.xlsx
+*.xls
+*.pptx
+*.ppt
+*.pdf
+
+# Archives
+*.tar.*
+
+# MATLAB Compiler / Coder
+*App/
+#*.prj
+
+# MATLAB Files
+# https://www.mathworks.com/company/newsletters/articles/automatically-save-backup-m-files-with-the-matlab-editor.html
+*.asv
+*.m~
+*.mat
+*.mex*
+
+
