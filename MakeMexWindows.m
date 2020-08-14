@@ -11,6 +11,9 @@
 % TODO:
 %   1.  A
 %   Release Notes:
+%   -   1.0.001     14/08/2020  Royi Avital
+%       *   Fixed a bug with support for MSVC 2019.
+%       *   Set the default compiler to be MSVC 2019.
 %   -   1.0.000     30/04/2020  Royi Avital
 %       *   First release version.
 % ----------------------------------------------------------------------------------------------- %
@@ -57,7 +60,7 @@ libFileName     = 'glpk.lib';
 
 %% User Settings
 
-msvcVersion     = MSVC_VERSION_150_PROFESSIONAL;
+msvcVersion     = MSVC_VERSION_160_PROFESSIONAL;
 
 % Requires CPU with AVX2, Might be faster
 cCompFlags      = ' /MT /O2 /Ob3 /Oi /arch:AVX2 ';
@@ -77,7 +80,7 @@ switch(msvcVersion)
         msvcCommonToolsPath = MSVC_150_PROFESSIONAL_COMMON_TOOLS_PATH;
     case(MSVC_VERSION_150_COMMUNITY)
         msvcCommonToolsPath = MSVC_150_COMMUNITY_COMMON_TOOLS_PATH;
-    case(MSVC_VERSION_150_PROFESSIONAL)
+    case(MSVC_VERSION_160_PROFESSIONAL)
         msvcCommonToolsPath = MSVC_160_PROFESSIONAL_COMMON_TOOLS_PATH;
     case(MSVC_VERSION_160_COMMUNITY)
         msvcCommonToolsPath = MSVC_160_COMMUNITY_COMMON_TOOLS_PATH;

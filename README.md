@@ -57,6 +57,8 @@ TBD
 ## Remarks
 
  1.	The procedure was tested on:
-	*	Windows 10 64 Bit with MSVC 2017 with MATLAB R2020a.
+	*	Windows 10 64 Bit with MSVC 2017 Professional with MATLAB R2020a.
+	*	Windows 10 64 Bit with MSVC 2019 Professional with MATLAB R2020a.
+	*	Windows 10 64 Bit with MSVC 2019 Community with MATLAB R2020a.
 	* 	Linux Mint 19.3 (Based on Ubuntu 18.04 LTS) with GCC 7.5.0 with MATLAB R2020a.
- 2. Users with different installations of MSVC (Community Edition, 2019, etc...), Please verify all is working.
+ 2. Users with different macOS, Please assist with issues.
