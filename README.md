@@ -4,7 +4,7 @@
 
 GLPKMEX is a MATLAB MEX Interface for the [GLPK Library](https://www.gnu.org/software/glpk/) developed by Andrew Makhorin.  
 GLPKMEX is developed by Nicolo' Giorgetti (Email: giorgetti at ieee.org).  
-GLPK is currently being mantained by Niels Klitgord (Email: niels at bu.edu).  
+GLPK is currently being maintained by Niels Klitgord (Email: niels at bu.edu).  
 
 This version of GLPK MEX Generator is maintained by Royi Avital.  
 It is based on [`glpkmex`](https://github.com/blegat/glpkmex) by Benoit Legat.  
@@ -31,7 +31,7 @@ Then open a MATLAB session and navigate MATLAB to the folder the repository was 
  3.	Update `mexCompFlags` for MEX Compilation flags. It won't have any significant performance gain as most of work is done in the GLPK Library.
  	In case of being unsure, just set `useCompFlags = OFF;` (Default).
  4.	Set the MEX API by `mexApi`.
- 5.	Run the script. At the end is should verify the `MEX` file generated is working.
+ 5.	Run the script. At the end it should verify the generated `MEX` file is working.
 
 ### Linux 64 Bit
 
@@ -41,7 +41,7 @@ Then open a MATLAB session and navigate MATLAB to the folder the repository was 
  3.	Update `mexCompFlags` for MEX Compilation flags. It won't have any significant performance gain as most of work is done in the GLPK Library.
  	In case of being unsure, just set `useCompFlags = OFF;` (Default).
  4.	Set the MEX API by `mexApi`.
- 5.	Run the script. At the end is should verify the `MEX` file generated is working.
+ 5.	Run the script. At the end it should verify the generated `MEX` file is working.
  
 ### The MEX API
 
@@ -61,4 +61,4 @@ TBD
 	*	Windows 10 64 Bit with MSVC 2019 Professional with MATLAB R2020a.
 	*	Windows 10 64 Bit with MSVC 2019 Community with MATLAB R2020a.
 	* 	Linux Mint 19.3 (Based on Ubuntu 18.04 LTS) with GCC 7.5.0 with MATLAB R2020a.
- 2. Users with different macOS, Please assist with issues.
+ 2. Users with different Operating System (Specifically macOS), Please assist with issues.
