@@ -11,6 +11,9 @@
 % TODO:
 %   1.  A
 %   Release Notes:
+%   -   1.0.002     25/03/2022  Royi Avital
+%       *   Added support for MSVC 2022 on MATLAB R2022a.
+%       *   Added support for GLPK 5.0.
 %   -   1.0.001     14/08/2020  Royi Avital
 %       *   Fixed a bug with support for MSVC 2019.
 %       *   Set the default compiler to be MSVC 2019.
@@ -38,11 +41,15 @@ MSVC_VERSION_150_PROFESSIONAL   = 1; %<! MSVC 2017 Professtional Edition
 MSVC_VERSION_150_COMMUNITY      = 2; %<! MSVC 2019 Community Edition
 MSVC_VERSION_160_PROFESSIONAL   = 3; %<! MSVC 2019 Professional Edition
 MSVC_VERSION_160_COMMUNITY      = 4; %<! MSVC 2019 Community Edition
+MSVC_VERSION_170_PROFESSIONAL   = 5; %<! MSVC 2022 Professional Edition
+MSVC_VERSION_170_COMMUNITY      = 6; %<! MSVC 2022 Community Edition
 
 MSVC_150_PROFESSIONAL_COMMON_TOOLS_PATH = 'C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\Common7\Tools\';
 MSVC_150_COMMUNITY_COMMON_TOOLS_PATH    = 'C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\Tools\';
 MSVC_160_PROFESSIONAL_COMMON_TOOLS_PATH = 'C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\Common7\Tools\';
 MSVC_160_COMMUNITY_COMMON_TOOLS_PATH    = 'C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\Tools\';
+MSVC_170_PROFESSIONAL_COMMON_TOOLS_PATH = 'C:\Program Files\Microsoft Visual Studio\2022\Professional\Common7\Tools\';
+MSVC_170_COMMUNITY_COMMON_TOOLS_PATH    = 'C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\Tools\';
 
 BUILD_BATCH_FILENAME    = 'Build_GLPK_MEX.bat';
 
@@ -51,16 +58,15 @@ MEX_API_R2017B              = '-R2017b'; %<! Large Arrays (64 Bit Indices), Sepa
 MEX_API_LARGE_ARRAY         = '-largeArrayDims'; %<! Large Arrays (64 Bit Indices), Separate Complex Arrays (Basically like R2017b)
 MEX_API_COMPATIBLE_ARRAY    = '-compatibleArrayDims'; %<! 32 Bit Indices, Separate Complex Arrays
 
-glpkFileName    = 'glpk-4.65.tar.gz';
-glpkUrl         = 'https://ftp.gnu.org/gnu/glpk/glpk-4.65.tar.gz';
-glpkFolder      = 'glpk-4.65';
-mexFileName     = 'glpkcc.cpp';
-libFileName     = 'glpk.lib';
+GLPK_VERSION_4_65 = 1;
+GLPK_VERSION_5_00 = 2;
 
 
 %% User Settings
 
-msvcVersion     = MSVC_VERSION_160_PROFESSIONAL;
+glpkVersion = GLPK_VERSION_5_00;
+
+msvcVersion     = MSVC_VERSION_170_PROFESSIONAL;
 
 % Requires CPU with AVX2, Might be faster
 cCompFlags      = ' /MT /O2 /Ob3 /Oi /arch:AVX2 ';
@@ -75,6 +81,23 @@ mexApi          = MEX_API_R2017B;
 
 %% Inner Settings
 
+switch(glpkVersion)
+    case(GLPK_VERSION_4_65)
+        glpkString      = 'GLPK 4.65';
+        glpkFileName    = 'glpk-4.65.tar.gz';
+        glpkUrl         = 'https://ftp.gnu.org/gnu/glpk/glpk-4.65.tar.gz';
+        glpkFolder      = 'glpk-4.65';
+        mexFileName     = 'glpkcc.cpp';
+        libFileName     = 'glpk.lib';
+    case(GLPK_VERSION_5_00)
+        glpkString      = 'GLPK 5.00';
+        glpkFileName    = 'glpk-5.0.tar.gz';
+        glpkUrl         = 'https://ftp.gnu.org/gnu/glpk/glpk-5.0.tar.gz';
+        glpkFolder      = 'glpk-5.0';
+        mexFileName     = 'glpkcc.cpp';
+        libFileName     = 'glpk.lib';
+end
+
 switch(msvcVersion)
     case(MSVC_VERSION_150_PROFESSIONAL)
         msvcCommonToolsPath = MSVC_150_PROFESSIONAL_COMMON_TOOLS_PATH;
@@ -84,6 +107,10 @@ switch(msvcVersion)
         msvcCommonToolsPath = MSVC_160_PROFESSIONAL_COMMON_TOOLS_PATH;
     case(MSVC_VERSION_160_COMMUNITY)
         msvcCommonToolsPath = MSVC_160_COMMUNITY_COMMON_TOOLS_PATH;
+    case(MSVC_VERSION_170_PROFESSIONAL)
+        msvcCommonToolsPath = MSVC_170_PROFESSIONAL_COMMON_TOOLS_PATH;
+    case(MSVC_VERSION_170_COMMUNITY)
+        msvcCommonToolsPath = MSVC_170_COMMUNITY_COMMON_TOOLS_PATH;
 end
 
 glpkWin64BuildFolder    = [glpkFolder, FILE_SEP, 'w64', FILE_SEP];
@@ -93,7 +120,7 @@ workingFolderPath       = [pwd(), FILE_SEP];
 
 %% Downloading Data & Setting Environment
 
-disp(['Downloading GLPK 4.65 from Official Site']);
+disp(['Downloading ', glpkString, ' from Official Site']);
 disp([' ']);
 glpkFilePath    = websave(glpkFileName, glpkUrl);
 disp(['Unpacking the TAR File']);

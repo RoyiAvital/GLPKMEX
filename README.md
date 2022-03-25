@@ -11,7 +11,7 @@ GLPK is currently being maintained by Niels Klitgord (Email: niels at bu.edu).
 
 This version of GLPK MEX Generator is maintained by Royi Avital.  
 It is based on [`glpkmex`](https://github.com/blegat/glpkmex) by Benoit Legat.  
-It was updated to support the `4.65` version of GLPK (Latest as of May 2020).
+It was updated to support the `4.65` and `5.0` versions of GLPK (Latest as of March 2022).
 
 ## Instructions for Compiling MEX from Source
 
@@ -24,7 +24,7 @@ Then open a MATLAB session and navigate MATLAB to the folder the repository was 
 
  1.	A working MATLAB installation with `MEX` compiler set.
  2.	A Compiler:
- 	*	Windows: MSVC 2017 or MSVC 2019.
+ 	*	Windows: MSVC 2017, MSVC 2019, MSVC 2022.
 	*	Linux: GCC 6.3 and above.
 
 ### Windows 64 Bit
@@ -63,5 +63,6 @@ TBD
 	*	Windows 10 64 Bit with MSVC 2017 Professional with MATLAB R2020a.
 	*	Windows 10 64 Bit with MSVC 2019 Professional with MATLAB R2020a.
 	*	Windows 10 64 Bit with MSVC 2019 Community with MATLAB R2020a.
+	*	Windows 10 64 Bit with MSVC 2022 Professional with MATLAB R2022a.
 	* 	Linux Mint 19.3 (Based on Ubuntu 18.04 LTS) with GCC 7.5.0 with MATLAB R2020a.
  2. Users with different Operating System (Specifically macOS), Please assist with issues.
