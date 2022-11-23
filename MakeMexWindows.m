@@ -61,6 +61,8 @@ MEX_API_COMPATIBLE_ARRAY    = '-compatibleArrayDims'; %<! 32 Bit Indices, Separa
 GLPK_VERSION_4_65 = 1;
 GLPK_VERSION_5_00 = 2;
 
+cGlpkVersion = {['4.65'], ['5.0']};
+
 
 %% User Settings
 
@@ -155,7 +157,7 @@ mex('-v', mexApi, cCompFlags, includeFolder, libFolder, mexFileName, libFileName
 
 
 % Verify
-disp(['Verifying the MEX File: If it shows "MEX interface to GLPK Version 4.65" all worked!']);
+disp(['Verifying the MEX File: If it shows "MEX interface to GLPK Version ', cGlpkVersion{glpkVersion}, '" all worked!']);
 disp([' ']);
 glpkcc(); %<! Should display the version
 
