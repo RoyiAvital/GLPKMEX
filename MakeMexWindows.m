@@ -1,3 +1,4 @@
+function MakeMexWindows(glpkVersion, msvcCommonToolsPath, options)
 % ----------------------------------------------------------------------------------------------- %
 % MakeMex - Generating Windows x64 MEX File for GLPK
 % Generates the MEX file of GLPK for Windows x64 system by downloading GLPK
@@ -21,77 +22,37 @@
 %       *   First release version.
 % ----------------------------------------------------------------------------------------------- %
 
-
-%% Setting Environment Parameters
-
-close('all');
-clear('all');
-clc();
-
-FALSE   = 0;
-TRUE    = 1;
-
-OFF     = 0;
-ON      = 1;
-
-FILE_SEP = filesep();
-PATH_SEP = pathsep();
-
-MSVC_VERSION_150_PROFESSIONAL   = 1; %<! MSVC 2017 Professtional Edition
-MSVC_VERSION_150_COMMUNITY      = 2; %<! MSVC 2019 Community Edition
-MSVC_VERSION_160_PROFESSIONAL   = 3; %<! MSVC 2019 Professional Edition
-MSVC_VERSION_160_COMMUNITY      = 4; %<! MSVC 2019 Community Edition
-MSVC_VERSION_170_PROFESSIONAL   = 5; %<! MSVC 2022 Professional Edition
-MSVC_VERSION_170_COMMUNITY      = 6; %<! MSVC 2022 Community Edition
-
-MSVC_150_PROFESSIONAL_COMMON_TOOLS_PATH = 'C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\Common7\Tools\';
-MSVC_150_COMMUNITY_COMMON_TOOLS_PATH    = 'C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\Tools\';
-MSVC_160_PROFESSIONAL_COMMON_TOOLS_PATH = 'C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\Common7\Tools\';
-MSVC_160_COMMUNITY_COMMON_TOOLS_PATH    = 'C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\Tools\';
-MSVC_170_PROFESSIONAL_COMMON_TOOLS_PATH = 'C:\Program Files\Microsoft Visual Studio\2022\Professional\Common7\Tools\';
-MSVC_170_COMMUNITY_COMMON_TOOLS_PATH    = 'C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\Tools\';
-
-BUILD_BATCH_FILENAME    = 'Build_GLPK_MEX.bat';
-
-MEX_API_R2018A              = '-R2018a'; %<! Large Arrays (64 Bit Indices), Interleaved Complex Arrays
-MEX_API_R2017B              = '-R2017b'; %<! Large Arrays (64 Bit Indices), Separate Complex Arrays
-MEX_API_LARGE_ARRAY         = '-largeArrayDims'; %<! Large Arrays (64 Bit Indices), Separate Complex Arrays (Basically like R2017b)
-MEX_API_COMPATIBLE_ARRAY    = '-compatibleArrayDims'; %<! 32 Bit Indices, Separate Complex Arrays
-
-GLPK_VERSION_4_65 = 1;
-GLPK_VERSION_5_00 = 2;
-
-cGlpkVersion = {['4.65'], ['5.0']};
-
+arguments
+    glpkVersion             (1,1)       string      {mustBeMember(glpkVersion, ["4.48","4.65","5.0"])}    = "4.48";
+    msvcCommonToolsPath     (1,1)       string      = fullfile("C:","Program Files","Microsoft Visual Studio","2022","Community","Common7","Tools");
+    options.MexApi          (1,1)       string      {mustBeMember(options.MexApi, ["-R2017b","-R2018a","-largeArrayDims","-compatibleArrayDims"])} = "-R2017b";
+    options.UseCompFlags    (1,1)       logical     = false;
+end
 
 %% User Settings
 
-glpkVersion = GLPK_VERSION_5_00;
-
-msvcVersion     = MSVC_VERSION_170_PROFESSIONAL;
-
 % Requires CPU with AVX2, Might be faster
-cCompFlags      = ' /MT /O2 /Ob3 /Oi /arch:AVX2 ';
 mexCompFlags    = ' /MT /O2 /Ob3 /Oi /arch:AVX2 ';
-
-% Use the default
-useCompFlags    = OFF;
-% Add support for arrays larger than ~2^31 elements (MEX_API_R2018A,
-% MEX_API_R2018A, MEX_API_LARGE_ARRAY)
-mexApi          = MEX_API_R2017B;
-
+BUILD_BATCH_FILENAME    = 'Build_GLPK_MEX.bat';
 
 %% Inner Settings
 
 switch(glpkVersion)
-    case(GLPK_VERSION_4_65)
+    case("4.48")
+        glpkString      = 'GLPK 4.48';
+        glpkFileName    = 'glpk-4.48.tar.gz';
+        glpkUrl         = 'https://ftp.gnu.org/gnu/glpk/glpk-4.48.tar.gz';
+        glpkFolder      = 'glpk-4.48';
+        mexFileName     = 'glpkcc_4.48.cpp';
+        libFileName     = 'glpk.lib';
+    case("4.65")
         glpkString      = 'GLPK 4.65';
         glpkFileName    = 'glpk-4.65.tar.gz';
         glpkUrl         = 'https://ftp.gnu.org/gnu/glpk/glpk-4.65.tar.gz';
         glpkFolder      = 'glpk-4.65';
         mexFileName     = 'glpkcc.cpp';
         libFileName     = 'glpk.lib';
-    case(GLPK_VERSION_5_00)
+    case("5.0")
         glpkString      = 'GLPK 5.00';
         glpkFileName    = 'glpk-5.0.tar.gz';
         glpkUrl         = 'https://ftp.gnu.org/gnu/glpk/glpk-5.0.tar.gz';
@@ -100,68 +61,52 @@ switch(glpkVersion)
         libFileName     = 'glpk.lib';
 end
 
-switch(msvcVersion)
-    case(MSVC_VERSION_150_PROFESSIONAL)
-        msvcCommonToolsPath = MSVC_150_PROFESSIONAL_COMMON_TOOLS_PATH;
-    case(MSVC_VERSION_150_COMMUNITY)
-        msvcCommonToolsPath = MSVC_150_COMMUNITY_COMMON_TOOLS_PATH;
-    case(MSVC_VERSION_160_PROFESSIONAL)
-        msvcCommonToolsPath = MSVC_160_PROFESSIONAL_COMMON_TOOLS_PATH;
-    case(MSVC_VERSION_160_COMMUNITY)
-        msvcCommonToolsPath = MSVC_160_COMMUNITY_COMMON_TOOLS_PATH;
-    case(MSVC_VERSION_170_PROFESSIONAL)
-        msvcCommonToolsPath = MSVC_170_PROFESSIONAL_COMMON_TOOLS_PATH;
-    case(MSVC_VERSION_170_COMMUNITY)
-        msvcCommonToolsPath = MSVC_170_COMMUNITY_COMMON_TOOLS_PATH;
-end
-
-glpkWin64BuildFolder    = [glpkFolder, FILE_SEP, 'w64', FILE_SEP];
-glpkSrcFolder           = [glpkFolder, FILE_SEP, 'src', FILE_SEP];
-workingFolderPath       = [pwd(), FILE_SEP];
-
+glpkWin64BuildFolder    = fullfile(glpkFolder, 'w64');
+glpkSrcFolder           = fullfile(glpkFolder, 'src');
 
 %% Downloading Data & Setting Environment
 
-disp(['Downloading ', glpkString, ' from Official Site']);
-disp([' ']);
-glpkFilePath    = websave(glpkFileName, glpkUrl);
-disp(['Unpacking the TAR File']);
-disp([' ']);
-cFileNames      = untar(glpkFileName);
+disp("Downloading " + glpkString + " from Official Site");
+disp(" ");
+websave(glpkFileName, glpkUrl);
+disp("Unpacking the TAR File");
+disp(" ");
+untar(glpkFileName);
 
 copyfile(BUILD_BATCH_FILENAME, glpkWin64BuildFolder);
-currFolder = cd(glpkWin64BuildFolder);
-
+currFolder  = cd(glpkWin64BuildFolder);
+resetFolder = onCleanup(@() cd(currFolder));
 
 %% Compilation
 
 % Compiling the GLPK Library
-disp(['Compiling the GLPK Library']);
-disp([' ']);
+disp("Compiling the GLPK Library");
+disp(" ");
 % TODO: Make the Batch File with support for input compiling flags ('cCompFlags')
-system(['"', msvcCommonToolsPath, 'vsdevcmd.bat" -arch=x64 && ', BUILD_BATCH_FILENAME]);
+[status,log] = system(sprintf('"%s/vsdevcmd.bat" -arch=x64 && %s', msvcCommonToolsPath, BUILD_BATCH_FILENAME));
+assert(status == 0, "Failed to compile with message:\n%s", log)
 cd(currFolder);
 
-if(useCompFlags == ON)
+if(options.UseCompFlags)
     cCompFlags      = ['COMPFLAGS="$COMPFLAGS ', mexCompFlags, '"'];
 else
-    cCompFlags      = ['COMPFLAGS="$COMPFLAGS"'];
+    cCompFlags      = 'COMPFLAGS="$COMPFLAGS"';
 end
-includeFolder   = ['-I', glpkSrcFolder];
-libFolder       = ['-L', glpkWin64BuildFolder];
+includeFolder   = ['-I', fullfile(currFolder,glpkSrcFolder)];
+libFolder       = ['-L', fullfile(currFolder,glpkWin64BuildFolder)];
 
-disp(['Compiling the MEX File']);
-disp([' ']);
+disp("Compiling the MEX File");
+disp(" ");
 
-mex('-v', mexApi, cCompFlags, includeFolder, libFolder, mexFileName, libFileName);
+mex('-v', options.MexApi, cCompFlags, includeFolder, libFolder, mexFileName, libFileName);
 
 
 % Verify
-disp(['Verifying the MEX File: If it shows "MEX interface to GLPK Version ', cGlpkVersion{glpkVersion}, '" all worked!']);
-disp([' ']);
+disp("Verifying the MEX File: If it shows ""MEX interface to GLPK Version " + glpkVersion + """ all worked!");
+disp(" ");
 glpkcc(); %<! Should display the version
 
-clear('all'); %<! In order to remove the MEX from memory
+clear("glpkcc"); %<! In order to remove the MEX from memory
 
 
 %% Restore Defaults
