@@ -98,7 +98,7 @@ libFolder       = ['-L', fullfile(currFolder,glpkWin64BuildFolder)];
 disp("Compiling the MEX File");
 disp(" ");
 
-mex('-v', options.MexApi, cCompFlags, includeFolder, libFolder, mexFileName, libFileName);
+mex('-output', 'glpkcc', '-v', options.MexApi, cCompFlags, includeFolder, libFolder, mexFileName, libFileName);
 
 
 % Verify
