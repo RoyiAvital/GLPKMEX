@@ -11,6 +11,8 @@
 % TODO:
 %   1.  A
 %   Release Notes:
+%   -   1.0.003     23/11/2022  Royi Avital
+%       *   Fixed issue with displaying the correct version of GLPK in `Verify`.
 %   -   1.0.002     25/03/2022  Royi Avital
 %       *   Added support for MSVC 2022 on MATLAB R2022a.
 %       *   Added support for GLPK 5.0.
